@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1 Introduction | Using Spark in  R  with the sparklyr package" />
+<meta property="og:type" content="book" />
+
+
+
+
+
+<meta name="author" content="Federico Girosi (DHCRC)" />
+
+<meta name="date" content="2020-01-21" />
+
+
+<meta name="description" content="1 Introduction | Using Spark in  R  with the sparklyr package">
+
+<title>1 Introduction | Using Spark in  R  with the sparklyr package</title>
+
+<link href="libs/tufte-css/tufte.css" rel="stylesheet" />
+<link href="libs/tufte-css/envisioned.css" rel="stylesheet" />
+<link href="libs/msmb-css/msmb.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+
+if(f.classList.contains('fa-plus-square')) {
+    f.classList.add('fa-minus-square')
+    f.classList.remove('fa-plus-square')
+} else {
+    f.classList.add('fa-plus-square')
+    f.classList.remove('fa-minus-square')
+}
+
+}
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="test.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul class="navbar">
+<li class="msmb"><p class="title">Using Spark in <font face="Courier New"> R </font> with the <font face="Courier New">sparklyr</font> package<p><p class="author">Federico Girosi (DHCRC)</p>
+<li class="dropdown" style="float:right">
+<a href="javascript:void(0)" class="dropbtn">&#x25BE; Chapters</a>
+<div class="dropdown-content">
+<a id="active-page" href="index.html"><span class="toc-section-number">1</span> Introduction</a>
+<a href="setting-up-spark-on-your-laptop.html"><span class="toc-section-number">2</span> Setting up Spark on your laptop</a>
+<a href="launching-spark-and-importing-a-csv-file.html"><span class="toc-section-number">3</span> Launching Spark and importing a CSV file</a>
+<a href="working-with-data-in-spark.html"><span class="toc-section-number">4</span> Working with data in Spark</a>
+<a href="merging-and-subsetting.html"><span class="toc-section-number">5</span> Merging and subsetting</a>
+<a href="linear-regression.html"><span class="toc-section-number">6</span> Linear regression</a>
+<a href="user-defined-functions.html"><span class="toc-section-number">7</span> User defined functions</a>
+<a href="user-defined-functions-and-hive-sql.html"><span class="toc-section-number">8</span> User defined functions and HIVE SQL</a>
+<a href="logistic-regression.html"><span class="toc-section-number">9</span> Logistic Regression</a>
+<a href="appendix-a-data-description.html">Appendix A: data description</a>
+<a href="references.html">References</a>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--bookdown:title:end--><!--bookdown:title:start--><html><body><div id="introduction" class="section level1" number="1">
+<h1 number="1">
+<span class="header-section-number">1</span> Introduction</h1>
+<p>In this blog I will be touching on several topics related to the usage of Spark and R as an analytical tool.
+<label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="images/DigitalHealth-logo-White.png" title="DHCRC" alt="DHCRC logo"><span style="color:#FFFFFF">DHCRC</span></span></span>
+The Medicaid data that have been made available by HMS and that can be accessed through the RONIN platform are massive, and will most likely require the use of some form of distributed computing in order to analyze them. Spark is a natural option in terms of distributed computing. Since many DHCRC researchers are familiar with R it seems useful to discuss how R can be used to run Spark processes without having to know too much about Spark. A similar reasoning applies to Python, but since I am more familiar with R than Python I am starting with R.</p>
+<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="images/ronin.png" title="RONIN" alt="RONIN"> RONIN is an user-friendly web application that allows anyone to launch complex computing and storage resources on AWS while keeping tracking of spending.</span></span></p>
+<p>In the first part of this blog I will focus on Spark and R, independently of the <a href="https://ronin.cloud/">RONIN</a> platform and the specifics of the Medicaid data, and I will show how to run Spark and R locally on a desktop/laptop for training purposes.
+In the second part I will address the specifics of Ronin and we will see Spark in action on clusters of machines using Medicaid data.</p>
+<div id="spark-and-r-why-bother" class="section level2" number="1.1">
+<h2 number="1.1">
+<span class="header-section-number">1.1</span> Spark and R: why bother?</h2>
+<p>As an R user my preference is to use <font face="Courier New">R</font> for everything I do and switch to other tools only if needed. Therefore I get very frustrated when I encounter a large data set I cannot analyze in <font face="Courier New">R</font> because it does not fit in memory and/or it would take too long to process. This is the case of HMS Medicaid data set, that is so large that just having a cursory look at it requires non-trivial effort. An attractive option to ease the frustration is to use <font face="Courier New">R</font> in conjunction with the <font face="Courier New">sparklyr</font>: this allows me to use <font face="Courier New">R</font> as an interface to Spark, writing code using <font face="Courier New">R</font> syntax while Spark works its magic in the background.</p>
+<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><img src="images/sparklyr.png" title="Sparklyr" alt="sparklyr book"> This book is available online at <a href="https://therinspark.com/data.html" class="uri">https://therinspark.com/data.html</a>.</span></span></p>
+<p>But what is Spark anyway? Spark is a software platform that allows users to take advantage of computer clusters. Users who need to analyze large data sets can write programs in R, Python, Java, Scala and SQL and as long as they use a predefined set of operators and a certain programming model they may not even be aware that Spark is the engine powering such fast computations. One of the very attractive features of Spark is that it comes with a comprehensive <a href="https://spark.apache.org/mllib/">machine learning library (MLlib)</a> that includes both machine learning algorithms and workflow utilities such as feature transformation and pipelines. The MLlib can be invoked directly from R, giving R users access to unprecedented computational capabilities. What I also found very attractive of Spark is that basically you interact with it in R through the <font face="Courier New">dplyr</font> package, which has become the bread and butter of data manipulations, or through the <font face="Courier New">DBI</font> package, that allows you to use the full power of SQL. It also turned out that Spark was incredibly easy to install on my Dell laptop, and I was able to start to play with simple example within minutes of beginning the whole process. <font face="Courier New">sparklyr</font> package is not the only package that allows R users to interact with R: <font face="Courier New">SparkR</font> is also availale. However I found <font face="Courier New">sparklyr</font> easier to use and well documented in the recent book <span class="citation">(Luraschi, Kuo, and Ruiz <a href="references.html#ref-LurKuoRui19" role="doc-biblioref">2019</a>)</span>. Therefore this is the package I will use in this blog.</p>
+
+</div>
+</div></body></html>
+
+<p style="text-align: center;">
+<a href="setting-up-spark-on-your-laptop.html"><button class="btn btn-default">Next</button></a>
+</p>
+<p class="build-date">Page built: 
+2020-01-21
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

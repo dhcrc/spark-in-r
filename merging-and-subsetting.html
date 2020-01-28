@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="5 Merging and subsetting | Using Spark in  R  with the sparklyr package" />
+<meta property="og:type" content="book" />
+
+
+
+
+
+<meta name="author" content="Federico Girosi (DHCRC)" />
+
+<meta name="date" content="2020-01-21" />
+
+
+<meta name="description" content="5 Merging and subsetting | Using Spark in  R  with the sparklyr package">
+
+<title>5 Merging and subsetting | Using Spark in  R  with the sparklyr package</title>
+
+<link href="libs/tufte-css/tufte.css" rel="stylesheet" />
+<link href="libs/tufte-css/envisioned.css" rel="stylesheet" />
+<link href="libs/msmb-css/msmb.css" rel="stylesheet" />
+<script>
+function toggle_visibility(id1, id2) {
+var e = document.getElementById(id1);
+var f = document.getElementById(id2);
+
+e.style.display = ((e.style.display!='none') ? 'none' : 'block');
+
+if(f.classList.contains('fa-plus-square')) {
+    f.classList.add('fa-minus-square')
+    f.classList.remove('fa-plus-square')
+} else {
+    f.classList.add('fa-plus-square')
+    f.classList.remove('fa-minus-square')
+}
+
+}
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="test.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul class="navbar">
+<li class="msmb"><p class="title">Using Spark in <font face="Courier New"> R </font> with the <font face="Courier New">sparklyr</font> package<p><p class="author">Federico Girosi (DHCRC)</p>
+<li class="dropdown" style="float:right">
+<a href="javascript:void(0)" class="dropbtn">&#x25BE; Chapters</a>
+<div class="dropdown-content">
+<a href="index.html"><span class="toc-section-number">1</span> Introduction</a>
+<a href="setting-up-spark-on-your-laptop.html"><span class="toc-section-number">2</span> Setting up Spark on your laptop</a>
+<a href="launching-spark-and-importing-a-csv-file.html"><span class="toc-section-number">3</span> Launching Spark and importing a CSV file</a>
+<a href="working-with-data-in-spark.html"><span class="toc-section-number">4</span> Working with data in Spark</a>
+<a id="active-page" href="merging-and-subsetting.html"><span class="toc-section-number">5</span> Merging and subsetting</a>
+<a href="linear-regression.html"><span class="toc-section-number">6</span> Linear regression</a>
+<a href="user-defined-functions.html"><span class="toc-section-number">7</span> User defined functions</a>
+<a href="user-defined-functions-and-hive-sql.html"><span class="toc-section-number">8</span> User defined functions and HIVE SQL</a>
+<a href="logistic-regression.html"><span class="toc-section-number">9</span> Logistic Regression</a>
+<a href="appendix-a-data-description.html">Appendix A: data description</a>
+<a href="references.html">References</a>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><div id="merging-and-subsetting" class="section level1" number="5">
+<h1 number="5">
+<span class="header-section-number">5</span> Merging and subsetting</h1>
+<p>In this section we will take our large data set, merge it with another one and perform some other basic manipulations supported by <font face="Courier New">dplyr</font>. On the way we will encounter two key Spark functions: <strong>compute()</strong> and <strong>collect()</strong>.</p>
+<p>The country of Urghuland is geograpically divided in counties, and this information is stored in the variable <em>geo</em>. There are approximately two thousand counties in Urghuland, which is far too many to use in a regression analysis. Since counties are grouped into states we can use the state variable instead, in order to account for geography.</p>
+<p>The mapping from counties to states is contained in the file “geo_state.csv”, and therefore we will load it into Spark and merge it into our data using <em>geo</em> as merging key.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="merging-and-subsetting.html#cb23-1"></a>state &lt;-<span class="st"> </span><span class="kw">spark_read_csv</span>(sc, <span class="dt">name=</span><span class="st">"state"</span>, </span>
+<span id="cb23-2"><a href="merging-and-subsetting.html#cb23-2"></a>                        <span class="dt">path=</span><span class="kw">paste</span>(data.raw.dir,<span class="st">"geo_state.csv"</span>,<span class="dt">sep=</span><span class="st">""</span>))</span>
+<span id="cb23-3"><a href="merging-and-subsetting.html#cb23-3"></a>merged &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(state,<span class="dt">by=</span><span class="st">"geo"</span>)</span></code></pre></div>
+<pre><code>## Warning: package 'treemap' was built under R version 3.6.2</code></pre>
+<p>
+<span class="marginnote shownote">
+<!--
+<div class="figure">--><span id="fig:state"></span>
+<img src="SparklyR-book_files/figure-html/state-1.png" alt="People in Urghuland live in 9 different states of quite different sizes." width="672"><!--
+<p class="caption marginnote">-->Figure 1: People in Urghuland live in 9 different states of quite different sizes.<!--</p>-->
+<!--</div>--></span>
+</p>
+<p>Notice that this operation takes a surprisingly small amount of time: this is because Spark is “lazy”, and will not really perform this evaluation until it is needed. In other words all Spark has done is to prepare the SQL query that it will run behind the scenes and stored it in <em>merged</em>, until it is the moment to actually use the merged file. You can actually see the SQL query with the following command:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="merging-and-subsetting.html#cb25-1"></a><span class="kw">show_query</span>(merged)</span></code></pre></div>
+<pre><code>## &lt;SQL&gt;
+## SELECT `LHS`.`geo` AS `geo`, `LHS`.`gender` AS `gender`, `LHS`.`age` AS `age`, `LHS`.`id` AS `id`, `LHS`.`bmi` AS `bmi`, `LHS`.`smoking` AS `smoking`, `LHS`.`income` AS `income`, `LHS`.`education` AS `education`, `LHS`.`marital_status` AS `marital_status`, `LHS`.`heart` AS `heart`, `LHS`.`diabetes` AS `diabetes`, `LHS`.`hypertension` AS `hypertension`, `LHS`.`stroke` AS `stroke`, `LHS`.`cancer` AS `cancer`, `LHS`.`gvt_cost` AS `gvt_cost`, `LHS`.`cost` AS `cost`, `RHS`.`state` AS `state`
+## FROM `Urghuland_data` AS `LHS`
+## LEFT JOIN `state` AS `RHS`
+## ON (`LHS`.`geo` = `RHS`.`geo`)</code></pre>
+<p>In order to force Spark to actually perform the merge we can use the function <strong>compute</strong>() and store the result in a Spark table that we call “merged_table”. If we call <strong>show_query</strong>() after <strong>compute</strong>() we see that
+the SQL call has changed, and it merely reads the table from storage:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="merging-and-subsetting.html#cb27-1"></a>merged =<span class="st"> </span><span class="kw">compute</span>(merged,<span class="st">"merged_table"</span>)</span>
+<span id="cb27-2"><a href="merging-and-subsetting.html#cb27-2"></a><span class="kw">show_query</span>(merged)</span></code></pre></div>
+<pre><code>## &lt;SQL&gt;
+## SELECT *
+## FROM `merged_table`</code></pre>
+<p>Since this table now sits in Spark RDD you can inspect with the Rstudio previewer under the “Connection” tab.</p>
+<p><span style="color:#007dd1; font-size:2em;">Issue:</span> If you are piping several <font face="Courier New">dplyr</font> commands you may often need to force an evaluation using <strong>compute</strong>(), usually after a join. It seems that Spark lazy evaluation gets confused when piping a bunch of SQL statements.</p>
+<p>As an example of this issue with piped SQL statements let us try to subset the merged data set and extract only the first 100 records. It would be natural to use this syntax:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="merging-and-subsetting.html#cb29-1"></a>submerge =<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(state,<span class="dt">by=</span><span class="st">"geo"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">100</span>)</span></code></pre></div>
+<p>The code will run, but any attempt to actually use the object <em>submerge</em> will give a Java error. However, the following code will work:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="merging-and-subsetting.html#cb30-1"></a>submerge =<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(state,<span class="dt">by=</span><span class="st">"geo"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-2"><a href="merging-and-subsetting.html#cb30-2"></a><span class="st">  </span><span class="kw">compute</span>(<span class="st">"submerge_table"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">100</span>)</span>
+<span id="cb30-3"><a href="merging-and-subsetting.html#cb30-3"></a><span class="co">### let us look at the SQL</span></span>
+<span id="cb30-4"><a href="merging-and-subsetting.html#cb30-4"></a><span class="kw">show_query</span>(submerge)</span></code></pre></div>
+<pre><code>## &lt;SQL&gt;
+## SELECT *
+## FROM (SELECT *
+## FROM `submerge_table` TABLESAMPLE (100 rows) ) `dbplyr_005`</code></pre>
+<p>At this point we have a small data set we may want to import into memory so it becomes a regular R object and we can do things with it. This is done with the function <strong>collect</strong>(), that retrieves the data in a local tibble. If we do not need the Spark object we can simply rewrite on it:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="merging-and-subsetting.html#cb32-1"></a>submerge =<span class="st"> </span><span class="kw">collect</span>(submerge)</span></code></pre></div>
+
+</div></body></html>
+
+<p style="text-align: center;">
+<a href="working-with-data-in-spark.html"><button class="btn btn-default">Previous</button></a>
+<a href="linear-regression.html"><button class="btn btn-default">Next</button></a>
+</p>
+<p class="build-date">Page built: 
+2020-01-21
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
